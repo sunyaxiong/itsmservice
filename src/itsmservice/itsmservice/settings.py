@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'apps.accounts.apps.AccountsConfig',
+    'apps.accounts.django_cas_ng',
+    'apps.cas_sync.apps.CasSyncConfig',
 ]
 
 MIDDLEWARE = [
@@ -48,6 +51,17 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'django_cas_ng.backends.CASBackend',
+)
+
+# cas conf
+SUCC_REDIRECT_URL = "itsm.ecscloud.com"
+CAS_SERVER_URL = "http://cas.ecscloud.com/cas/"
+# CAS_REDIRECT_URL = "http://www.baidu.com"
+
 
 ROOT_URLCONF = 'itsmservice.urls'
 
@@ -97,8 +111,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'cas',
         'USER': 'root',
-        'PASSWORD': '123123Qwe',
-        "HOST": "52.83.147.135",
+        'PASSWORD': '123123',
+        # "HOST": "52.83.147.135",
         "PORT": "3306",
     },
 }
@@ -150,3 +164,84 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+    '/home/syx/workspace/itsmservice/src/itsmservice/static',
+]
+
+
+# logging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '[%(asctime)s] [%(levelname)s] %(message)s'
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': '/tmp/django.log',
+            'formatter': 'verbose'
+        },
+        'email': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'include_html': True,
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file', 'email'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
+
+
+# fit2cloud api conf
+if DEBUG:
+    CLOUD_HOST = "111.13.61.173"
+    CMDB_HOST = "111.13.61.173"
+    access_key = "My00ZjRkMzVkZA=="
+    cloud_secret_key = "228e1f50-3b39-4213-a8d8-17e8bf2aeb1e"
+    INTERNET_HOST = "111.13.61.173"
+else:
+    INTERNET_HOST = "cmp.ecscloud.com"
+    CLOUD_HOST = "172.16.13.155"
+    CMDB_HOST = "172.16.13.155"
+    access_key = "My00ZjRkMzVkZA=="
+    cloud_secret_key = "228e1f50-3b39-4213-a8d8-17e8bf2aeb1e"
+
+CMDB_CONF = {
+    "access_key": access_key,
+    "version": "v1",
+    "signature_method": "HmacSHA256",
+    "signature_version": "v1"
+}
+
+CLOUD_CONF = {
+    "access_key": access_key,
+    "version": "v1",
+    "signature_method": "HmacSHA256",
+    "signature_version": "v1",
+    "user": "sunyaxiong@vstecs.com",
+}
+secret_key = cloud_secret_key
+# cloud_secret_key = '228e1f50-3b39-4213-a8d8-17e8bf2aeb1e'
+
+# mail
+EMAIL_HOST = 'smtp.163.com'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = 'sunyaxiongnn@163.com'
+EMAIL_HOST_PASSWORD = 'Sun880519'
+EMAIL_SUBJECT_PREFIX = u'[vstecs.com]'
+EMAIL_USE_TLS = True

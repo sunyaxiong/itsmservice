@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>伟仕云安 | 用户注册</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Bootstrap 3.3.7 -->
+  <link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="/static/bower_components/font-awesome/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="/static/bower_components/Ionicons/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="/static/dist/css/AdminLTE.min.css">
+  <!-- iCheck -->
+  <link rel="stylesheet" href="/static/plugins/iCheck/square/blue.css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  <!-- Google Font -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+</head>
+<body class="hold-transition register-page">
+<div class="register-box">
+  <div class="register-logo">
+    <a href="/accounts/login/" style="color=#"><b>伟仕云安</b>ITSM服务平台</a>
+{#    <a href="/accounts/login/"><img src="../static/js/img/vstecs.png">ITSM服务平台</a>#}
+  </div>
+
+  <div class="register-box-body">
+    <p class="login-box-msg">注册新用户</p>
+    {% if messages %}
+    {% for message in messages %}
+            {% include "log_errors.html" %}
+    {% endfor %}
+    {% endif %}
+    <form action="/accounts/register/" method="post">{% csrf_token %}
+      <div class="form-group has-feedback">
+        <label>用户名</label>
+        <input type="text" class="form-control" placeholder="用户名" name="username">
+        <span class="glyphicon glyphicon-user form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <label>邮箱</label>
+        <input type="email" class="form-control" placeholder="邮箱" name="email">
+        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <label>电话</label>
+        <input type="text" class="form-control" placeholder="电话" name="phone">
+        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <label>组织</label><br>
+        <select class="form-control" id="org" name="org" onChange="editable(this);">
+          {% for i in org_list %}
+          <option>{{ i }}</option>
+          {% endfor %}
+          <option value="">请输入</option>
+        </select>
+{#        <input type="text" class="form-control" placeholder="岗位" name="org">#}
+        <span class="glyphicon glyphicon-tag form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <label>部门</label>
+{#        <input type="text" class="form-control" placeholder="部门" name="department">#}
+        <select class="form-control" name="department" id="department" onclick=get_dep_list()>
+          <option></option>
+        </select>
+      </div>
+{#      <div class="form-group has-feedback">#}
+{#        <label>岗位角色</label>#}
+{#        <select class="form-control" name="position">#}
+{#            <option>普通用户</option>#}
+{#            <option>部门经理</option>#}
+{#            <option>组织管理员</option>#}
+{#        </select>#}
+{#        <span class="glyphicon glyphicon-tag form-control-feedback"></span>#}
+{#      </div>#}
+      <div class="form-group has-feedback">
+        <label>密码</label>
+        <input type="password" class="form-control" placeholder="密码" name="password" id="password">
+        <span id="result" class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <label>重新输入密码</label>
+        <input type="password" class="form-control" placeholder="重新输入密码" name="password2" id="password2">
+        <span id="result2"></span>
+      </div>
+      <div class="row">
+        <div class="col-xs-8">
+          <div class="checkbox icheck">
+            <label>
+              <input type="checkbox"> 我同意 <a href="#">协议</a>
+            </label>
+          </div>
+        </div>
+        <!-- /.col -->
+        <div class="col-xs-4">
+          <button type="submit" class="btn btn-primary btn-block btn-flat" id="submit">注册</button>
+        </div>
+        <!-- /.col -->
+      </div>
+    </form>
+    <a href="/accounts/login" class="text-center">我已经注册过账户</a>
+  </div>
+  <!-- /.form-box -->
+</div>
+<!-- /.register-box -->
+
+<!-- jQuery 3 -->
+<script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- iCheck -->
+<script src="/static/plugins/iCheck/icheck.min.js"></script>
+<script language="javascript">
+    function editable(select1){
+       if(select1.value == ""){
+          var newvalue = prompt("请输入","");
+          if(newvalue){
+             addSelected(select1,newvalue,newvalue);
+          }
+       }
+    }
+
+    function addSelected(fld1,value1,text1){
+        if (document.all)    {
+                var Opt = fld1.document.createElement("OPTION");
+                Opt.text = text1;
+                Opt.value = value1;
+                fld1.options.add(Opt);
+                Opt.selected = true;
+        }else{
+                var Opt = new Option(text1,value1,false,false);
+                Opt.selected = true;
+                fld1.options[fld1.options.length] = Opt;
+        }
+    }
+</script>
+<script>
+  $(function () {
+    $('input').iCheck({
+      checkboxClass: 'icheckbox_square-blue',
+      radioClass: 'iradio_square-blue',
+      increaseArea: '20%' // optional
+    });
+  });
+</script>
+<script>
+function get_dep_list() {
+    var org_name = $("#org").val();
+    $.ajax({
+        type: "GET",
+        url: "/itsm/config/get_department_name_list",
+        data: {
+            "org_name": org_name
+        },
+        success: function (ret) {
+            console.log(ret["department"]);
+            var lst;
+            lst= ret["department"];
+            for (i in lst) {
+                console.log(lst[i]);
+                var ss = '<option>' + lst[i] + '</option>';
+                $("#department").append(ss);
+            }
+{#            $("#department").removeAllChild();#}
+            // window.location.href="/itsm/event_list/";
+        }
+    })
+}
+</script>
+<script>
+    $(document).ready(function() {
+
+	$('#password').keyup(function(){
+		$('#result').html(checkStrength($('#password').val()))
+	});
+
+    $('#password2').keyup(function(){
+		$('#result2').html(checkStrength2($('#password2').val()))
+	});
+
+	function checkStrength(password){
+
+	//initial strength
+    var strength = 0;
+
+    //if the password length is less than 6, return message.
+    if (password.length < 6) {
+		$('#result').removeClass();
+		$('#result').addClass('bg-red');
+        $('#submit').attr('disabled', true);
+		return '密码太短'
+	}
+
+    //length is ok, lets continue.
+
+	//if length is 8 characters or more, increase strength value
+	if (password.length > 7) strength += 1;
+
+	//if password contains both lower and uppercase characters, increase strength value
+	if (password.match(/([a-z].*[A-Z])|([A-Z].*[a-z])/))  strength += 1;
+
+	//if it has numbers and characters, increase strength value
+	if (password.match(/([a-zA-Z])/) && password.match(/([0-9])/))  strength += 1;
+
+	//if it has one special character, increase strength value
+    if (password.match(/([!,%,&,@,#,$,^,*,?,_,~])/))  strength += 1;
+
+	//if it has two special characters, increase strength value
+    if (password.match(/(.*[!,%,&,@,#,$,^,*,?,_,~].*[!,%,&,@,#,$,^,*,?,_,~])/)) strength += 1;
+
+	//now we have calculated strength value, we can return messages
+
+	//if value is less than 2
+	if (strength < 2 ) {
+		$('#result').removeClass();
+		$('#result').addClass('bg-red');
+        $('#submit').attr('disabled', true);
+		return '密码太弱'
+	} else if (strength == 2 ) {
+		$('#result').removeClass();
+		$('#result').addClass('bg-green');
+        $('#submit').removeAttr('disabled', true);
+		return '密码良好'
+	} else {
+		$('#result').removeClass();
+		$('#result').addClass('bg-success');
+        $('#submit').removeAttr('disabled', true);
+		return '密码强度很好'
+	}
+}
+
+function checkStrength2(password){
+
+	if (password != $('#password').val()) {
+        $('#submit').attr('disabled', true);
+        return "密码不一致";
+    } else {
+        $('#submit').removeAttr('disabled', true);
+        $('#result2').remove();
+    }
+}
+});
+</script>
+</body>
+</html>
