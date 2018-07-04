@@ -1,3 +1,11 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Issue
+
+
+class IssueAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(Issue, IssueAdmin)
+

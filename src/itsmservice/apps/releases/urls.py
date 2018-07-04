@@ -16,6 +16,11 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
+from . import views
+
+
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    # 发布管理
+    url(r'^release_list/$', views.releases),
+    url(r'^release/(?P<pk>\d{1,9})', views.release_detail),
 ]

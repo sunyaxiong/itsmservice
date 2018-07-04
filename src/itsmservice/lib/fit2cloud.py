@@ -8,9 +8,7 @@ import base64
 import hmac
 import logging
 import urllib.parse as urllib
-import json
-from OMPService.settings import CMDB_CONF, secret_key
-from OMPService.settings import CLOUD_HOST, CMDB_HOST
+from itsmservice import settings
 
 
 def my_replace(str):
@@ -31,31 +29,31 @@ class Fit2CloudClient(object):
         """
         init
         :param conf:  公共参数
-        :param sk: secret_key
+        :param sk: settings.secret_key
         """
         self.conf = conf
         self.secret_key = sk
-        self.get_instance_url = "http://{}:28888/rest/api/v1/admin/cloudserver/list".format(CLOUD_HOST)
-        self.user_add_url = "http://{}:28888/rest/api/v1/admin/user/add".format(CLOUD_HOST)
-        self.user_get_url = "http://{}:28888/rest/api/v1/admin/user/list".format(CLOUD_HOST)
-        self.workspace_add_url = "http://{}:28888/rest/api/v1/admin/group/add".format(CLOUD_HOST)
-        self.org_add_url = "http://{}:28888/rest/api/v1/admin/organize/add".format(CLOUD_HOST)
-        self.org_get_url = "http://{}:28888/rest/api/v1/admin/organize/list".format(CLOUD_HOST)
-        self.org_co_permission_url = "http://{}:28888/rest/api/v1/admin/organize/permission/add".format(CLOUD_HOST)
-        self.co_permission_url = "http://{}:28888/rest/api/v1/admin/group/permission/add".format(CLOUD_HOST)
-        self.vm_query_url = "http://{}:28080/rest/api/v1/vm/list".format(CMDB_HOST)
-        self.disk_query_url = "http://{}:28080/rest/api/v1/disk/list".format(CMDB_HOST)
-        self.order_create_url = "http://{}:28888/rest/api/v1/order/apply/product".format(CLOUD_HOST)
-        self.order_get_url = "http://{}:28888/rest/api/v1/order/get".format(CLOUD_HOST)
-        self.get_work_space_url = "http://{}:28888/rest/api/v1/group/list".format(CLOUD_HOST)
-        self.product_list_url = "http://{}:28888/rest/api/v1/catalog/product/list".format(CLOUD_HOST)
-        self.cluster_list_url = "http://{}:28888/rest/api/v1/cluster/list".format(CLOUD_HOST)
-        self.cluster_role_list_url = "http://{}:28888/rest/api/v1/cluster/role/list".format(CLOUD_HOST)
-        self.ph_device_list_url = "http://{}:28080/rest/api/v1/physical/device/list".format(CMDB_HOST)
-        self.ph_cpu_add_url = "http://{}:28080/rest/api/v1/physical/cpu/add".format(CMDB_HOST)
-        self.ph_disk_add_url = "http://{}:28080/rest/api/v1/physical/disk/add".format(CMDB_HOST)
-        self.ph_device_add_url = "http://{}:28080/rest/api/v1/physical/device/add".format(CMDB_HOST)
-        self.ph_device_delete_url = "http://{}:28080/rest/api/v1/physical/device/delete".format(CMDB_HOST)
+        self.get_instance_url = "http://{}:28888/rest/api/v1/admin/cloudserver/list".format(settings.CLOUD_HOST)
+        self.user_add_url = "http://{}:28888/rest/api/v1/admin/user/add".format(settings.CLOUD_HOST)
+        self.user_get_url = "http://{}:28888/rest/api/v1/admin/user/list".format(settings.CLOUD_HOST)
+        self.workspace_add_url = "http://{}:28888/rest/api/v1/admin/group/add".format(settings.CLOUD_HOST)
+        self.org_add_url = "http://{}:28888/rest/api/v1/admin/organize/add".format(settings.CLOUD_HOST)
+        self.org_get_url = "http://{}:28888/rest/api/v1/admin/organize/list".format(settings.CLOUD_HOST)
+        self.org_co_permission_url = "http://{}:28888/rest/api/v1/admin/organize/permission/add".format(settings.CLOUD_HOST)
+        self.co_permission_url = "http://{}:28888/rest/api/v1/admin/group/permission/add".format(settings.CLOUD_HOST)
+        self.vm_query_url = "http://{}:28080/rest/api/v1/vm/list".format(settings.CMDB_HOST)
+        self.disk_query_url = "http://{}:28080/rest/api/v1/disk/list".format(settings.CMDB_HOST)
+        self.order_create_url = "http://{}:28888/rest/api/v1/order/apply/product".format(settings.CLOUD_HOST)
+        self.order_get_url = "http://{}:28888/rest/api/v1/order/get".format(settings.CLOUD_HOST)
+        self.get_work_space_url = "http://{}:28888/rest/api/v1/group/list".format(settings.CLOUD_HOST)
+        self.product_list_url = "http://{}:28888/rest/api/v1/catalog/product/list".format(settings.CLOUD_HOST)
+        self.cluster_list_url = "http://{}:28888/rest/api/v1/cluster/list".format(settings.CLOUD_HOST)
+        self.cluster_role_list_url = "http://{}:28888/rest/api/v1/cluster/role/list".format(settings.CLOUD_HOST)
+        self.ph_device_list_url = "http://{}:28080/rest/api/v1/physical/device/list".format(settings.CMDB_HOST)
+        self.ph_cpu_add_url = "http://{}:28080/rest/api/v1/physical/cpu/add".format(settings.CMDB_HOST)
+        self.ph_disk_add_url = "http://{}:28080/rest/api/v1/physical/disk/add".format(settings.CMDB_HOST)
+        self.ph_device_add_url = "http://{}:28080/rest/api/v1/physical/device/add".format(settings.CMDB_HOST)
+        self.ph_device_delete_url = "http://{}:28080/rest/api/v1/physical/device/delete".format(settings.CMDB_HOST)
 
     def build_signature(self, attrs):
         """
@@ -470,8 +468,8 @@ class Fit2CloudClient(object):
 
 
 if __name__ == "__main__":
-    # from OMPService.settings import CMDB_CONF, secret_key
-    run = Fit2CloudClient(CMDB_CONF, secret_key)
+    # from OMPService.settings import settings.CMDB_CONF, settings.secret_key
+    run = Fit2CloudClient(settings.CMDB_CONF, settings.secret_key)
     print(run)
     # import hashlib
     # import hmac

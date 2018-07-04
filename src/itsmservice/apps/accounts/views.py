@@ -10,11 +10,15 @@ from django.contrib.auth.decorators import login_required
 
 from .forms import UserForm
 from .forms import ProfileForm, PassResetForm
-from .models import Profile
+from .models import Profile, MessageAlert
 from apps.cas_sync import models as cas_model
 from itsmservice import settings
 
 logger = logging.getLogger("django")
+
+
+def index(request):
+    return render(request, 'index.html')
 
 
 def login(request):
@@ -122,3 +126,67 @@ def pwd_restet(request):
             logger.info("密码修改数据提交失败")
             messages.warning(request, "密码提交失败,请重试")
             return HttpResponseRedirect("url")
+
+
+def user_confirm(request, pk):
+    page_header = "新用户审核"
+    confirm_message = MessageAlert.objects.get(id=int(pk))
+    content_list = confirm_message.content.split("-")
+    org, department, username = content_list[0], content_list[1], content_list[2]
+    profile = Profile.objects.filter(username=username).first()
+
+    if request.method == "GET":
+
+        return render(request, 'itsm/user_info_confirm.html', locals())
+    elif request.method == "POST":
+        pass
+        return render(request, 'itsm/issue_detail.html', locals())
+
+
+def user_confirm_accept(request):
+
+    message_id = request.GET.get("id")
+    try:
+        message_info = MessageAlert.objects.get(id=int(message_id))
+
+        # 用户激活
+        user = User.objects.get(username=message_info.initiator)
+        user.is_active = 1
+        user.is_staff = 1
+        user.save()
+
+        # 消息查阅
+        message_info.checked = 1
+        message_info.save()
+
+        # cas 用户创建逻辑放到审核消息
+        cas_user, _ = cas_model.app_user.objects.using("cas_db").get_or_create(
+            username=user.username,
+        )
+        if _:
+            cas_user.password = user.password
+            cas_user.save(using="cas_db")
+            logger.info("CAS用户: {} 注册成功".format(cas_user.username))
+
+        logger.info("用户信息审核成功")
+        return HttpResponseRedirect("/itsm/event_list/")
+    except Exception as e:
+        logger.info(e, "用户信息审核失败")
+        messages.warning(request, "用户信息审核失败")
+        return HttpResponseRedirect("/itsm/event_list/")
+
+
+def user_confirm_reject(request):
+    url = request.META.get('HTTP_REFERER')
+
+    message_id = request.GET.get("message_id")
+    try:
+        message_info = MessageAlert.objects.get(id=message_id)
+
+        # 消息查阅
+        message_info.checked = 1
+        message_info.save()
+
+    except Exception as e:
+        logger.info(e)
+        return HttpResponseRedirect(url)

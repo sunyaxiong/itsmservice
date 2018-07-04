@@ -17,7 +17,8 @@ from django.conf.urls import url
 
 from apps.accounts.django_cas_ng import views
 from .views import (
-    user_profile, pwd_restet, login
+    user_profile, pwd_restet, login, user_confirm,
+    user_confirm_accept, user_confirm_reject,
 )
 
 urlpatterns = [
@@ -30,6 +31,11 @@ urlpatterns = [
     url(r'^callback/$', views.callback, name='cas_ng_proxy_callback'),
     url(r'^user_profile/$', user_profile, name='user profile'),
     url(r'^pwd_reset/$', pwd_restet, name='pwd reset'),
+
+    # user confirm message alert
+    url(r'^user_confirm/(?P<pk>\d{1,9})', user_confirm),
+    url(r'^user_confirm/accept/', user_confirm_accept),
+    url(r'^user_confirm/reject/', user_confirm_reject),
 
     url(r'^login1/$', login, name='mylogin'),
 

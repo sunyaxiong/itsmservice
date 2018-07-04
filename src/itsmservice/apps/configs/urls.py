@@ -16,6 +16,12 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
+from . import views
+
+
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    # 配置管理
+    url(r'^config/$', views.config),
+    url(r'^config/get_department_name_list/$', views.get_department_name_list),
+    url(r'^config_overview/$', views.config_overview),
 ]

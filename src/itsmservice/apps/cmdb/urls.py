@@ -16,6 +16,21 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
+from . import views
+
+
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    # CMDB
+    url(r'cmdb/query_vm/$', views.get_vm_list),
+    url(r'cmdb/query_disk/$', views.get_disk_list),
+
+    # cloud config
+    url(r'cloud/get_product_list/$', views.get_product_list),
+    url(r'cloud/get_cluster_list/$', views.get_cluster_list),
+    url(r'cloud/get_cluster_role_list/$', views.get_cluster_role_list),
+    url(r'cloud/order_create/$', views.order_create),
+    url(r'cloud/order_get/$', views.order_get),
+    url(r'cloud/user_get/$', views.user_get),
+    url(r'cloud/get_instance_list/$', views.get_instance_list),
+    url(r'cloud/resource_info/$', views.resource_info),
 ]

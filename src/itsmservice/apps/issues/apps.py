@@ -2,4 +2,5 @@ from django.apps import AppConfig
 
 
 class IssuesConfig(AppConfig):
-    name = 'issues'
+    name = 'apps.issues'
+    verbose_name = "问题管理"

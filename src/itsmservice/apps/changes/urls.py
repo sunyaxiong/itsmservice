@@ -16,6 +16,18 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
+from . import views
+
+
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+
+    # 变更管理
+    url(r'^change_list/$', views.changes),
+    url(r'^change/(?P<pk>\d{1,9})', views.change_detail),
+    url(r'^change/pass/$', views.flow_pass),
+    url(r'^change/reject/$', views.change_reject_back),
+    url(r'^changes/add/$', views.change_add),
+    url(r'^changes/change_to_config/(?P<pk>\d{1,9})', views.change_to_config),
+    url(r'^changes/close/(?P<pk>\d{1,9})', views.change_close),
 ]
+

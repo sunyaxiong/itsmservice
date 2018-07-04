@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+{% block head %}
+    <script src="/static/js/this_config.js"></script>
+    <script src="/static/bower_components/ckeditor/ckeditor.js"></script>
+    <script src="/static/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+    <script src="/static/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+{% endblock %}
+{% block header %}
+    <li class="active">{{ page_header }}</li>
+{% endblock %}
+{% block content %}
+{% if messages %}
+    {% for message in messages %}
+            {% include "itsm/log_errors.html" %}
+    {% endfor %}
+{% endif %}
+<section class="invoice">
+    <form class="bs-example bs-example-form" role="form" action="/itsm/issue/{{ issue.id }}" method="POST">{% csrf_token %}
+    <div class="row">
+        <div class="col-xs-12">
+            <h2 class="page-header">
+                <i class="fa fa-globe"></i> 问题详情页
+                <a class="button">
+                    <span class="button small" style="color: blue" onclick="input_enable()">编辑</span></a>
+                <small class="pull-right">创建时间: {{ issue.dt_created }}</small>
+            </h2>
+        </div>
+        <!-- /.col -->
+    </div>
+    <div class="row">
+        <p><i class="fa fa-dashboard"></i><span> 问题明细</span></p>
+        <div class="form-group">
+            <div class="col-md-8">
+                <label for="name">问题名称: </label>
+                <input class="form-control" type="text" name="name" disabled="disabled" value={{ issue.name }}><br>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <table class="table-striped">
+{#                <tr>#}
+{#                    <td><label for="name">服务水平等级: </label></td>#}
+{#                    <td><input class="form-control" type="text" name="name" disabled="disabled" value={{ issue.service_level }}></td>#}
+{#                </tr>#}
+                <tr>
+                    <td><label>更新时间: </label></td>
+                    <td><input class="form-control" type="text" name="name" disabled="disabled" value={{ issue.dt_updated }}></td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-4">
+            <tr>
+                <td><label>紧急度: </label></td>
+                <td><select class="form-control" disabled="disabled" name="emergency_degree" >
+                    <option value={{ issue.emergency_degree }}>{{ issue.get_emergency_degree_display }}</option>
+                    {% for k, v in degree_choice_list %}
+                        <option value={{ k }}>{{ v }}</option>
+                    {% endfor %}
+                </select></td>
+            </tr>
+            <tr>
+                <td><label>问题状态: </label></td>
+                <td><input class="form-control" type="text" name="name" disabled="disabled" value={{ issue.state }}></td>
+            </tr>
+        </div>
+    </div><br>
+    <div class="row">
+        <p><i class="fa fa-dashboard"></i><span> 人员明细</span></p>
+        <div class="col-md-6">
+            <table class="table-striped">
+                <tr>
+                    <div class="form-group">
+                        <td><label>发起人: </label></td>
+                        <td>
+                            <input class="form-control" type="text" name="name" disabled="disabled" value={{ issue.initiator }}>
+                        </td>
+                    </div>
+                </tr>
+                <tr>
+                    <td><label>发起人邮箱: </label></td>
+                    <td><input class="form-control" type="text" name="name" disabled="disabled" value="s@s.com"></td>
+                </tr>
+                <tr>
+                    <td><label>发起人电话: </label></td>
+                    <td><input class="form-control" type="text" name="name" disabled="disabled" value="18922222222"></td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-6">
+            <table class="table-striped">
+                <tr>
+                    <td><label>处理人: </label></td>
+                    <td>
+                        <select class="form-control" disabled="disabled" name="handler" >
+                            <option value={{ issue.handler }}>{{ issue.handler.username }}</option>
+                            {% for i in user_list %}
+                                <option value={{ i }}>{{ i.username }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>处理人邮箱: </label></td>
+                    <td>
+                        <input class="form-control" type="text" name="technician_mail"
+                               disabled="disabled" value={{ issue.handler.email }}>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>处理人电话: </label></td>
+                    <td><input class="form-control" type="text" name="technician_phone" disabled="disabled" value="18922222222"></td>
+                </tr>
+            </table>
+        </div>
+    </div><br>
+    <div class="row">
+        <input id="instance_id" hidden value={{ issue.event_from.instance_id }}>
+        <p><i class="fa fa-dashboard"></i><span>资源明细</span></p>
+        <p>
+          {% if profile.org_admin %}
+{#            <a href="http://{{ host }}/alert/vm?status=showNull">#}
+            <a href="http://{{ host }}/business-analytics/#/alert/list">
+                <span id="order_id">查看告警明细</span>
+            </a>
+          {% elif request.user.is_superuser %}
+            <a href="http://{{ host }}/business-analytics/#/alert/list">
+                <span id="order_id">查看告警明细</span>
+            </a>
+          {% else %}
+            <a href="http://{{ host }}/alert/vm?status=showNull">
+                <span id="order_id">查看告警明细</span>
+            </a>
+          {% endif %}
+        </p>
+        <div class="col-md-6">
+            <table class="table-striped">
+                <tr>
+                    <td><label>主机名: </label></td>
+                    <td><label class="form-control" id="hostname" disabled="disabled"></label></td>
+                </tr>
+                <tr>
+                    <td><label>IP地址: </label></td>
+                    <td><label class="form-control" id="localIp" disabled="disabled"></label></td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-6">
+            <table class="table-striped">
+                <tr>
+                    <td><label>公司归属: </label></td>
+                    <td>
+                        <label class="form-control" id="groupEnvName" disabled="disabled"></label>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>实例类型: </label></td>
+                    <td>
+                        <label class="form-control" id="instanceType" disabled="disabled"></label>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div><br>
+    <div class="row">
+        <p class="lead">流转记录:</p>
+        <div class="col-xs-8">
+            {% for i in solution_list %}
+            <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
+                <label>记录: </label></br>
+                {{ i.username }}<span>: </span>{{ i.dt_created }}<br>
+                {{ i.content }}
+            </p>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row">
+        <!-- 问题处理记录提交框 -->
+        <div class="col-xs-8">
+            <textarea class="text text-blue"
+                      placeholder="此处填写处理意见"
+                      cols="90" rows="8"
+                      name="solution"></textarea>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-8">
+            <br/>
+            <a href={{ issue.attach_file }}>{{ issue.attach_file }}</a>
+            <input type="file" name="attach_file">
+        </div>
+    </div>
+    <div class="row no-print">
+        {% if display %}
+            <div class="col-xs-12">
+                <a href="/itsm/issue/close/{{ issue.id }}"
+                   class="btn btn-primary pull-right" style="margin-right: 5px;">
+                    <i class="fa fa-close"></i> 关闭问题
+                </a>
+                <a class="btn btn-primary pull-right" style="margin-right: 5px;"
+                    data-toggle="modal" data-target="#issueUpdateModal">
+                    问题升级
+                </a>
+                <a class="btn btn-primary pull-right" style="margin-right: 5px;"
+                    data-toggle="modal" data-target="#issueToKnowledgeModal">
+                    转入知识库
+                </a>
+                <button type="submit" class="btn btn-primary pull-right" style="margin-right: 5px;">
+                    <i class="fa fa-save"></i> {{ button_submit }}
+                </button>
+            </div>
+        {% endif %}
+    </div>
+    </form>
+</section>
+{% include "itsm/modal/issue_upgrade.html" %}
+{% include "itsm/modal/issue_to_knowledge.html" %}
+{% endblock %}
+{% block script %}
+    <script>
+        $(document).ready(function () {
+
+            // instance list query
+            var instance_id = $("#instance_id").val();
+            $.ajax({
+                type:"GET",
+                url:"/itsm/cloud/resource_info/",
+                data:{"instance_id": instance_id},
+                success: function (ret) {
+                    console.log(ret["localIp"]);
+                    $("#hostname").html(ret["hostname"]);
+                    $("#localIp").html(ret["localIp"]);
+                    $("#instanceType").html(ret["instanceType"]);
+                    $("#groupEnvName").html(ret["groupEnvName"]);
+                }
+            });
+
+        })
+    </script>
+{% endblock %}

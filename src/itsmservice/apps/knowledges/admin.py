@@ -1,3 +1,10 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Knowledge
+
+
+class KnowledgeAdmin(admin.ModelAdmin):
+    list_display = ("title", "state", "creater")
+
+
+admin.site.register(Knowledge, KnowledgeAdmin)

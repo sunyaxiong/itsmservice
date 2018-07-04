@@ -16,6 +16,14 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
+from . import views
+
+
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    # 问题管理
+    url(r'^issue_list/$', views.issues),
+    url(r'^issue/(?P<pk>\d{1,9})', views.issue_detail),
+    url(r'^issue/close/(?P<pk>\d{1,9})', views.issue_close),
+    url(r'^issue/upgrade/$', views.issue_upgrade),
+    url(r'^issue/issue_to_knowledge/$', views.issue_to_knowledge),
 ]

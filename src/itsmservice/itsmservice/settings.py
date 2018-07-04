@@ -15,6 +15,22 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# env
+import logging
+environment = os.environ.get('ITSM')
+logger = logging.getLogger(__name__)
+handler = logging.StreamHandler()
+formatter = logging.Formatter('%(asctime)s - %(levelname)s: %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+logger.setLevel(logging.INFO)
+
+if environment == 'local':
+    logger.info('Load locale environment settings')
+    from .conf.locale import *
+elif environment == 'product':
+    logger.info('Load product environment settings')
+    from .conf.product import *
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -37,9 +53,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'apps.apps.AppsConfig',
     'apps.accounts.apps.AccountsConfig',
     'apps.accounts.django_cas_ng',
     'apps.cas_sync.apps.CasSyncConfig',
+    'apps.events.apps.EventsConfig',
+    'apps.changes.apps.ChangesConfig',
+    'apps.issues.apps.IssuesConfig',
+    'apps.slas.apps.SlasConfig',
+    'apps.knowledges.apps.KnowledgesConfig',
+    'apps.configs.apps.ConfigsConfig',
+    'apps.api.apps.ApiConfig',
 ]
 
 MIDDLEWARE = [
@@ -56,12 +81,6 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'django_cas_ng.backends.CASBackend',
 )
-
-# cas conf
-SUCC_REDIRECT_URL = "itsm.ecscloud.com"
-CAS_SERVER_URL = "http://cas.ecscloud.com/cas/"
-# CAS_REDIRECT_URL = "http://www.baidu.com"
-
 
 ROOT_URLCONF = 'itsmservice.urls'
 
@@ -94,37 +113,8 @@ WSGI_APPLICATION = 'itsmservice.wsgi.application'
 #     }
 # }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'itsm',
-        'USER': 'root',
-        'PASSWORD': '123123',
-        'HOST': '',
-        'PORT': '3306',
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-            'charset': 'utf8mb4',
-        },
-    },
-    'cas_db': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'cas',
-        'USER': 'root',
-        'PASSWORD': '123123',
-        # "HOST": "52.83.147.135",
-        "PORT": "3306",
-    },
-}
 
 
-# use multi-database in django
-DATABASE_ROUTERS = ['itsmservice.database_router.DatabaseAppsRouter']
-DATABASE_APPS_MAPPING = {
-    # example:
-    # 'app_name':'database_name',
-    'cas_sync': 'cas_db',
-}
 
 
 # Password validation
@@ -207,41 +197,3 @@ LOGGING = {
 }
 
 
-# fit2cloud api conf
-if DEBUG:
-    CLOUD_HOST = "111.13.61.173"
-    CMDB_HOST = "111.13.61.173"
-    access_key = "My00ZjRkMzVkZA=="
-    cloud_secret_key = "228e1f50-3b39-4213-a8d8-17e8bf2aeb1e"
-    INTERNET_HOST = "111.13.61.173"
-else:
-    INTERNET_HOST = "cmp.ecscloud.com"
-    CLOUD_HOST = "172.16.13.155"
-    CMDB_HOST = "172.16.13.155"
-    access_key = "My00ZjRkMzVkZA=="
-    cloud_secret_key = "228e1f50-3b39-4213-a8d8-17e8bf2aeb1e"
-
-CMDB_CONF = {
-    "access_key": access_key,
-    "version": "v1",
-    "signature_method": "HmacSHA256",
-    "signature_version": "v1"
-}
-
-CLOUD_CONF = {
-    "access_key": access_key,
-    "version": "v1",
-    "signature_method": "HmacSHA256",
-    "signature_version": "v1",
-    "user": "sunyaxiong@vstecs.com",
-}
-secret_key = cloud_secret_key
-# cloud_secret_key = '228e1f50-3b39-4213-a8d8-17e8bf2aeb1e'
-
-# mail
-EMAIL_HOST = 'smtp.163.com'
-EMAIL_PORT = 25
-EMAIL_HOST_USER = 'sunyaxiongnn@163.com'
-EMAIL_HOST_PASSWORD = 'Sun880519'
-EMAIL_SUBJECT_PREFIX = u'[vstecs.com]'
-EMAIL_USE_TLS = True

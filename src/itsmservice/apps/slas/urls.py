@@ -16,6 +16,17 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
+from . import views
+
+
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    # sla管理
+    url(r'^sla/$', views.sla_dashboard),
+    url(r'^sla/event_dash/$', views.sla_event_dash),
+    url(r'^sla/issue_dash/$', views.sla_issue_dash),
+    url(r'^sla/change_dash/$', views.sla_change_dash),
+    url(r'^sla/release_dash/$', views.sla_release_dash),
+
+    # 满意度
+    url(r'^satisfaction/', views.satisfaction_log),
 ]
