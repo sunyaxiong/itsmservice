@@ -29,19 +29,17 @@ admin.site.site_url = None
 
 
 api_patterns = [
-    url(r'', include('apps.api.urls')),
+    url(r'', include('apps.urls')),
 ]
 
 urlpatterns = [
     url(r'^$', views.index),
     url(r'^admin/', admin.site.urls),
-    # url(r'^itsm/', include('itsm.urls')),
-    # url(r'^asset/', include('asset.urls')),
+    url(r'^configs/', include('apps.configs.urls')),
     url(r'^api/', include('apps.api.urls')),
     url(r'^events/', include('apps.events.urls')),
     url(r'^changes/', include('apps.changes.urls')),
     url(r'^issues/', include('apps.issues.urls')),
     url(r'^accounts/', include('apps.accounts.urls')),
-    # url(r'^$', include('itsm.urls')),
-    url(r'^rest/', include(api_patterns, namespace='rest_api', app_name='ops')),
+    url(r'^rest/', include(api_patterns, namespace='rest', app_name='itsm')),
 ]

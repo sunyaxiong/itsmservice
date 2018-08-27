@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block header %}
     <li class="active">{{ page_header }}</li>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 {% endblock %}
 {% block PHeader %}
 <h1>
@@ -8,6 +9,10 @@
 </h1>
 {% endblock %}
 {% block content %}
+<div class="row">
+    <div class="col-xs-12">
+    </div>
+</div>
 <div class="row">
     <div class="col-xs-12">
         <!-- /.box -->
@@ -67,11 +72,12 @@
                                 {% for i in data %}
                                 <tbody>
                                 <tr role="row" class="odd">
-                                    <td class="sorting_1"><a href="/itsm/change/{{ i.id }}">{{ i.name }}</a></td>
+                                    <td class="sorting_1"><a href="/changes/change/{{ i.id }}">{{ i.name }}</a></td>
                                     <td class="sorting_1">{{ i.get_state_display }}</td>
                                     <td class="sorting_1">{{ i.node_handler.username }}</td>
                                     <td class="sorting_1">{{ i.event.get_event_type_display }}</td>
-                                    <td class="sorting_1">{{ i.dt_created }}</td>
+{#                                    <td class="sorting_1">{{ i.dt_created }}</td>#}
+                                    <td class="sorting_1"><button @click="send()">ok</button></td>
                                 </tr>
                                 </tbody>
                                 {% endfor %}
@@ -125,4 +131,57 @@
     </div>
     <!-- /.col -->
 </div>
+{% endblock %}
+{% block script %}
+<script>
+{#    const axios = require('axios');#}
+    new Vue({
+        el: '#vapp',
+        delimiters: ['${', '}'],
+        data: {
+            message: '20'
+        },
+        methods:{
+            send(){
+                console.log(1234);
+                axios({
+                    method:'get',
+                    url:'http://127.0.0.1:9999/changes/change_list/'
+                }).then(function(resp){
+                    console.log(resp.data);
+                }).catch(function(resp){
+                    console.log('请求失败：'+resp.status+','+resp.statusText)
+                })
+            }
+        }
+    });
+    // Make a request for a user with a given ID
+    axios.get('http://www.baidu.com')
+      .then(function (response) {
+        // handle success
+        console.log(response);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+      .then(function () {
+        // always executed
+      });
+
+    // GET request for remote image
+    axios({
+      method:'get',
+      url:'http://bit.ly/2mTM3nY',
+      responseType:'stream'
+    }).then(function(response) {
+      response.data.pipe(fs.createWriteStream('ada_lovelace.jpg'))
+    });
+
+</script>
+<script>
+    $(document).ready(function(){
+        console.log(123)
+});
+</script>
 {% endblock %}

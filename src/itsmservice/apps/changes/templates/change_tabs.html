@@ -1,0 +1,268 @@
+ <div class="tab-content">
+    <div class="tab-pane" id="planning">
+        <div class="row">
+           <h5>上线计划</h5>
+        </div>
+        <div class="row">
+            <div class="col-xs-8">
+                <br/>
+                <a href={{ change.online_plan }}>{{ change.online_plan }}</a>
+                <input type="file" name="online_plan">
+            </div>
+        </div>
+        <div class="row">
+           <h5>回退计划</h5>
+        </div>
+        <div class="row">
+            <div class="col-xs-8">
+                <br/>
+                <a href={{ change.online_plan }}>{{ change.online_plan }}</a>
+                <input type="file" name="online_plan">
+            </div>
+        </div>
+        <div class="row">
+           <h5>停机时间</h5>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <tbody>
+                    {% for department in department_info.department %}
+                    <tr><td>{{ department }}</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="tab-pane" id="approve">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>评审委员列表
+                        <input type="checkbox" class="checkbox">
+                </thead>
+                <tbody>
+                    <tr>
+                        <th></th>
+                        <th>选择</th>
+                        <th>审核状态</th>
+                        <th>审核人</th>
+                        <th>发送时间</th>
+                    </tr>
+                    <tr>
+                        <th><a href="#">
+                            <i class="fa fa-times text-red"></i>
+                        </a></th>
+                        <th>
+                            <input type="checkbox" class="checkbox">
+                        </th>
+                        <th>
+                            <i class="fa fa-ban text-red"></i>
+                        </th>
+                        <th>
+                            <strong>sunyaxiong</strong>
+                            <label>yaxiong.sun@vstecs.com</label>
+                        </th>
+                        <th>
+                            <strong>2018年7月6日 11:21</strong>
+                        </th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="tab-pane" id="submission">
+        <div class="table-responsive">
+            <table cellpadding="2%" cellspacing="0" width="100%">
+                <!--  Common Field START -->
+                <tbody>
+                <tr height="26" class=""> <!-- NO OUTPUTENCODING -->
+
+
+                    <td width="20%" class="FormLabel3"><a id="change_vbf_fldname_模板" value="模板">模板</a></td>
+
+                    <td width="29%" id="change_vbf_fldval_模板">
+
+                        <a class="servicelist-infoicn" style="display:inline-block;" href="javascript:void(0)"
+                           title="紧急模板"></a>
+                        <span style="position:relative;top:-5px;">Emergency Template</span>
+
+                    </td>
+                    <!--  To define a line and white bg -->
+
+                    <td width="2%" class="change-formsptr">&nbsp;</td>
+
+
+                    <td width="20%" class="FormLabel3"><a id="change_vbf_fldname_工作流" value="工作流">工作流</a></td>
+
+                    <td width="29%" id="change_vbf_fldval_工作流">
+
+                        Marlowe - Emergency
+
+                    </td>
+                    <!--  To define a line and white bg -->
+
+
+                </tr>
+                <tr height="26" class="formListBgGray"> <!-- NO OUTPUTENCODING -->
+
+
+                    <td width="20%" class="FormLabel3"><a id="change_vbf_fldname_服务级别协议" value="服务级别协议">服务级别协议</a></td>
+
+                    <td width="29%" id="change_vbf_fldval_服务级别协议">
+
+                        没有指派
+
+                    </td>
+                    <!--  To define a line and white bg -->
+
+                    <td width="2%" class="change-formsptr">&nbsp;</td>
+
+
+                    <td width="20%" class="FormLabel3"><a id="change_vbf_fldname_违反SLA" value="违反SLA">违反SLA</a></td>
+
+                    <td width="29%" id="change_vbf_fldval_违反SLA">
+
+                        没有指派
+
+                    </td>
+                    <!--  To define a line and white bg -->
+
+
+                </tr>
+
+
+                <tr height="26" class=""> <!-- NO OUTPUTENCODING -->
+
+                    <td width="20%" class="FormLabel3"><a id="change_vbf_fldname_地点" value="地点">地点</a></td>
+
+                    <td width="29%"><a id="change_vbf_fldval_地点" value="不在任何地点">不在任何地点</a></td>
+
+
+                    <!--  To define a line and white bg -->
+
+                    <td width="2%" class="change-formsptr">&nbsp;</td>
+
+
+                    <td width="20%" class="FormLabel3"><a id="change_vbf_fldname_变更类型" value="变更类型">变更类型</a></td>
+
+                    <td width="29%"><a id="change_vbf_fldval_变更类型" value="没有指派">没有指派</a></td>
+
+
+                    <!--  To define a line and white bg -->
+
+
+                </tr>
+                <tr height="26" class="formListBgGray"> <!-- NO OUTPUTENCODING -->
+
+                    <td width="20%" class="FormLabel3"><a id="change_vbf_fldname_组" value="组">组</a></td>
+
+                    <td width="29%"><a id="change_vbf_fldval_组" value="没有指派">没有指派</a></td>
+
+
+                    <!--  To define a line and white bg -->
+
+                    <td width="2%" class="change-formsptr">&nbsp;</td>
+
+
+                    <td width="20%" class="FormLabel3"><a id="change_vbf_fldname_分类" value="分类">分类</a></td>
+
+                    <td width="29%"><a id="change_vbf_fldval_分类" value="没有指派">没有指派</a></td>
+
+
+                    <!--  To define a line and white bg -->
+
+
+                </tr>
+                <tr height="26" class=""> <!-- NO OUTPUTENCODING -->
+
+                    <td width="20%" class="FormLabel3"><a id="change_vbf_fldname_影响" value="影响">影响</a></td>
+
+                    <td width="29%"><a id="change_vbf_fldval_影响" value="没有指派">没有指派</a></td>
+
+
+                    <!--  To define a line and white bg -->
+
+                    <td width="2%" class="change-formsptr">&nbsp;</td>
+
+
+                    <td width="20%" class="FormLabel3"><a id="change_vbf_fldname_风险" value="风险">风险</a></td>
+
+                    <td width="29%"><a id="change_vbf_fldval_风险" value="没有指派">没有指派</a></td>
+
+
+                    <!--  To define a line and white bg -->
+
+
+                </tr>
+                <tr height="26" class="formListBgGray"> <!-- NO OUTPUTENCODING -->
+
+                    <td width="20%" class="FormLabel3"><a id="change_vbf_fldname_计划结束" value="计划结束">计划结束</a></td>
+
+                    <td width="29%"><a id="change_vbf_fldval_计划结束" value="N/A">N/A</a></td>
+
+
+                    <!--  To define a line and white bg -->
+
+                    <td width="2%" class="change-formsptr">&nbsp;</td>
+
+
+                    <td width="20%" class="FormLabel3"><a id="change_vbf_fldname_计划开始" value="计划开始">计划开始</a></td>
+
+                    <td width="29%"><a id="change_vbf_fldval_计划开始" value="N/A">N/A</a></td>
+
+
+                    <!--  To define a line and white bg -->
+
+
+                </tr>
+                <tr height="26" class=""> <!-- NO OUTPUTENCODING -->
+
+                    <td width="20%" class="FormLabel3"><a id="change_vbf_fldname_创建时间" value="创建时间">创建时间</a></td>
+
+                    <td width="29%"><a id="change_vbf_fldval_创建时间" value="08/07/2018 06:37 PM">08/07/2018 06:37 PM</a>
+                    </td>
+
+
+                    <!--  To define a line and white bg -->
+
+                    <td width="2%" class="change-formsptr">&nbsp;</td>
+
+
+                    <td width="20%" class="FormLabel3"><a id="change_vbf_fldname_完成时间" value="完成时间">完成时间</a></td>
+
+                    <td width="29%"><a id="change_vbf_fldval_完成时间" value="N/A">N/A</a></td>
+
+
+                    <!--  To define a line and white bg -->
+
+
+                </tr>
+                <tr height="26" class="formListBgGray"> <!-- NO OUTPUTENCODING -->
+
+                    <td width="20%" class="FormLabel3"><a id="change_vbf_fldname_受影响的服务" value="受影响的服务">受影响的服务</a></td>
+
+                    <td width="29%"><a id="change_vbf_fldval_受影响的服务" value="null">没数据</a></td>
+                    <!-- NO OUTPUTENCODING -->
+
+                    <!--  To define a line and white bg -->
+
+                    <td width="2%" class="change-formsptr">&nbsp;</td>
+
+
+                    <td width="20%" class="FormLabel3"><a id="change_vbf_fldname_资产" value="资产">资产</a></td>
+
+                    <td width="29%"><a id="change_vbf_fldval_资产" value="null">没数据</a></td> <!-- NO OUTPUTENCODING -->
+
+                    <!--  To define a line and white bg -->
+
+
+                </tr>
+
+                <!-- Template Fields - Only View - End -->
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

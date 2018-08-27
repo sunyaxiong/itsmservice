@@ -5,30 +5,49 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from lib.models import BaseModel
+from apps.common.models import BaseModel
 
 
 class Channel(models.Model):
+    """
+    组织信息表
+    """
     name = models.CharField(max_length=128, verbose_name="名称", unique=True)
+    address = models.CharField("公司地址", max_length=256, null=True, blank=True)
+    contacts = models.CharField("联系人", max_length=128, null=True, blank=True)
 
     def __str__(self):
         return self.name
 
 
 class Department(BaseModel):
+    """
+    部门信息表
+    """
     name = models.CharField(max_length=128, verbose_name="名称")
     org = models.ForeignKey("Channel", verbose_name="组织")
 
-
-class Organization(BaseModel):
-    name = models.CharField(max_length=128, verbose_name="名称", unique=True)
-    admin = models.ForeignKey(User, verbose_name="管理员")
-    event_module = jsonfield.JSONField(verbose_name="事件模板", null=True, blank=True)
-    issue_module = jsonfield.JSONField(verbose_name="问题模板", null=True, blank=True)
-    change_module = jsonfield.JSONField(verbose_name="变更模板", null=True, blank=True)
-
     def __str__(self):
         return self.name
+
+
+class JobTitle(BaseModel):
+    """
+    岗位信息表
+    """
+    name = models.CharField("岗位名称", max_length=128)
+    department = models.ForeignKey(Department, verbose_name="部门")
+
+
+# class Organization(BaseModel):
+#     name = models.CharField(max_length=128, verbose_name="名称", unique=True)
+#     admin = models.ForeignKey(User, verbose_name="管理员")
+#     event_module = jsonfield.JSONField(verbose_name="事件模板", null=True, blank=True)
+#     issue_module = jsonfield.JSONField(verbose_name="问题模板", null=True, blank=True)
+#     change_module = jsonfield.JSONField(verbose_name="变更模板", null=True, blank=True)
+#
+#     def __str__(self):
+#         return self.name
 
 
 class Profile(BaseModel):
@@ -37,7 +56,7 @@ class Profile(BaseModel):
     fit_user_type = models.IntegerField("云管用户类型", default=3)
     phone = models.BigIntegerField("手机号", null=True, blank=True)
     email = models.EmailField("邮箱", null=True, blank=True)
-    position = models.CharField("岗位", max_length=128, null=True, blank=True)
+    job_title = models.ForeignKey(JobTitle, verbose_name="岗位名称", null=True, blank=True)
     last_reset_pass = models.DateTimeField("上次修改密码时间", null=True, blank=True)
 
     def __str__(self):
@@ -53,7 +72,6 @@ class Profile(BaseModel):
 # @receiver(post_save, sender=User)
 # def save_user_profile(sender, instance, **kwargs):
 #     instance.profile.save()
-
 
 
 class MessageAlert(BaseModel):

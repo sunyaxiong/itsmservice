@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-from lib.models import BaseModel
+from apps.common.models import BaseModel
 
 from apps.changes.models import Change
 

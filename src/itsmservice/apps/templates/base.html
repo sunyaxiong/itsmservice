@@ -56,7 +56,7 @@ desired effect
 |---------------------------------------------------------|
 -->
 <body class="hold-transition skin-blue sidebar-mini">
-<div class="wrapper">
+<div class="wrapper" id="vapp">
 
   <!-- Main Header -->
   <header class="main-header">
@@ -303,7 +303,7 @@ desired effect
     </section>
 
     <!-- Main content -->
-    <section class="content container-fluid">
+    <section class="content">
         {% block content %}
         {% endblock %}
         <!--------------------------
@@ -414,6 +414,8 @@ desired effect
 <script src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- AdminLTE App -->
 <script src="/static/dist/js/adminlte.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
 
 <script src="/static/js/this_config.js"></script>
 {% block script %}

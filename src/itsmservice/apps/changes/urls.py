@@ -14,13 +14,17 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url
-from django.contrib import admin
+from django.conf.urls import include
+from rest_framework import routers
 
 from . import views
+from .viewsets import ChangeViewSet
 
+router = routers.DefaultRouter()
+router.register("change", ChangeViewSet, base_name="ChangeViewSet")
 
 urlpatterns = [
-
+    url(r'', include(router.urls, namespace='change_rest_api')),
     # 变更管理
     url(r'^change_list/$', views.changes),
     url(r'^change/(?P<pk>\d{1,9})', views.change_detail),

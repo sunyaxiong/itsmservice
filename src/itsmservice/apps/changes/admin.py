@@ -5,11 +5,11 @@ from .models import ChangeProcessLog
 
 
 class ChangeAdmin(admin.ModelAdmin):
-    list_display = ("name", "state")
+    list_display = ("name", "status")
 
 
 class ChangeLogAdmin(admin.ModelAdmin):
-    list_display = ("change_obj", "username", "content")
+    list_display = ("change", "username", "content")
 
 
 admin.site.register(Change, ChangeAdmin)

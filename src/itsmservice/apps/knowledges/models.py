@@ -1,5 +1,5 @@
 from django.db import models
-from lib.models import BaseModel
+from apps.common.models import BaseModel
 
 
 class Knowledge(BaseModel):

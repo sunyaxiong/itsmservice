@@ -29,14 +29,15 @@ def change_detail(request, pk):
     degree_choice_list = Change.EMERGENCY_DEGREE
     host = settings.INTERNET_HOST
 
-    initiator_obj = Profile.objects.filter(username=change.initiator).first()
+    initiator = User.objects.get(username=change.initiator)
 
     # 用户\管理员监控url不同
-    profile = Profile.objects.filter(username=request.user.username).first()
+    print(initiator)
+    profile = initiator.profile
 
     # 根据事件状态控制按钮显隐和名称
-    button_submit = "提交" if change.state == "draft" else "同意"
-    display = 0 if change.state == "ended" else 1
+    button_submit = "提交" if change.status == "draft" else "同意"
+    display = 0 if change.status == "ended" else 1
 
     if button_submit == "提交":
         action = "/itsm/change/{}".format(change.id)

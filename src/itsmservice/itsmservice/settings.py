@@ -65,6 +65,8 @@ INSTALLED_APPS = [
     'apps.knowledges.apps.KnowledgesConfig',
     'apps.configs.apps.ConfigsConfig',
     'apps.api.apps.ApiConfig',
+    'apps.common.apps.CommonConfig',
+    'apps.cmdb.apps.CmdbConfig',
 ]
 
 MIDDLEWARE = [
@@ -139,9 +141,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-hans'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
@@ -196,4 +198,44 @@ LOGGING = {
     },
 }
 
+# REST FRAMEWORK
+REST_FRAMEWORK = {
+        # 'DEFAULT_AUTHENTICATION_CLASSES': (
+        #     'people.authentication.CustomUserTokenAuthentication',
+        #     'people.authentication.CustomUserSessionAuthentication',
+        #     ),
+        'DEFAULT_FILTER_BACKENDS': (
+            'rest_framework.filters.DjangoFilterBackend',
+            'rest_framework.filters.SearchFilter',
+            'rest_framework.filters.OrderingFilter',
+            ),
+        'SEARCH_PARAM': 'search',
+        'DEFAULT_PAGINATION_CLASS': 'lib.pagination.CommonPageNumberPagination',
+        'DEFAULT_RENDERER_CLASSES': (
+            'rest_framework.renderers.JSONRenderer',
+            'rest_framework.renderers.BrowsableAPIRenderer',
+            ) if DEBUG else (
+            'rest_framework.renderers.JSONRenderer',
+            ),
+        # 'DEFAULT_PERMISSION_CLASSES': (
+        #     # 'common.permissions.ReadOnly',
+        #     ),
+        }
 
+
+# Redis conf
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379",
+        "TIMEOUT": 100*365*24*60*60,
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "KEY_PREFIX": "itsm",
+        }
+    }
+}
+
+
+# attache_file
+UPLOAD_ROOT = 'upload'

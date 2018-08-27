@@ -2,7 +2,7 @@ import jsonfield
 
 from django.db import models
 
-from lib.models import BaseModel
+from apps.common.models import BaseModel
 
 
 event_module = {"flow": [{"node": 0, "name": "开始"}, {"node": 1, "notify": "邮件", "name": "部门主管"}, {"node": 2, "name": "结束"}], "name": "事件审批"}
