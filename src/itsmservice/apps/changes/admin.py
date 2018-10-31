@@ -9,7 +9,7 @@ class ChangeAdmin(admin.ModelAdmin):
 
 
 class ChangeLogAdmin(admin.ModelAdmin):
-    list_display = ("change", "username", "content")
+    list_display = ("change", "user", "content")
 
 
 admin.site.register(Change, ChangeAdmin)

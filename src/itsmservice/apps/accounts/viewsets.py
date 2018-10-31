@@ -5,10 +5,20 @@ from .models import Profile, Channel
 from .serializers import ProfileSerializer, ChannelSerializer, UserSerializer
 
 
+class UserViewSet(viewsets.ModelViewSet):
+    model = User
+    serializer_class = UserSerializer
+
+    def get_queryset(self):
+        queryset = User.objects.filter()
+        return queryset
+
+
 class ProfileViewSet(viewsets.ModelViewSet):
 
     model = Profile
     serializer_class = ProfileSerializer
+    filter_fields = ("user", 'id')
 
     def get_queryset(self):
         queryset = Profile.objects.filter()
@@ -27,11 +37,11 @@ class ChannelViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-class UserViewSet(viewsets.ModelViewSet):
-
-    model = User
-    serializer_class = UserSerializer
-
-    def get_queryset(self):
-        queryset = User.objects.filter()
-        return queryset
+# class UserViewSet(viewsets.ModelViewSet):
+#
+#     model = User
+#     serializer_class = UserSerializer
+#
+#     def get_queryset(self):
+#         queryset = User.objects.filter()
+#         return queryset

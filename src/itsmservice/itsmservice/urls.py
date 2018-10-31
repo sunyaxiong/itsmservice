@@ -18,7 +18,9 @@ from django.conf.urls import include
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-
+from django.views.static import serve
+from rest_framework_jwt.views import obtain_jwt_token
+from rest_framework.authtoken import views as auth_views
 
 from apps.accounts import views
 
@@ -35,11 +37,17 @@ api_patterns = [
 urlpatterns = [
     url(r'^$', views.index),
     url(r'^admin/', admin.site.urls),
+    # rest framework jwt 认证接口
+    url(r'^login/', obtain_jwt_token),
+    # drf自带的token认证模式
+    url(r'^api-token-auth/', auth_views.obtain_auth_token),
+    url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
     url(r'^configs/', include('apps.configs.urls')),
     url(r'^api/', include('apps.api.urls')),
     url(r'^events/', include('apps.events.urls')),
     url(r'^changes/', include('apps.changes.urls')),
     url(r'^issues/', include('apps.issues.urls')),
     url(r'^accounts/', include('apps.accounts.urls')),
+    url(r'^release/', include('apps.releases.urls')),
     url(r'^rest/', include(api_patterns, namespace='rest', app_name='itsm')),
 ]

@@ -36,27 +36,25 @@ class JobTitle(BaseModel):
     岗位信息表
     """
     name = models.CharField("岗位名称", max_length=128)
-    department = models.ForeignKey(Department, verbose_name="部门")
+    department = models.ForeignKey(
+        Department, verbose_name="部门", related_name="department"
+    )
 
-
-# class Organization(BaseModel):
-#     name = models.CharField(max_length=128, verbose_name="名称", unique=True)
-#     admin = models.ForeignKey(User, verbose_name="管理员")
-#     event_module = jsonfield.JSONField(verbose_name="事件模板", null=True, blank=True)
-#     issue_module = jsonfield.JSONField(verbose_name="问题模板", null=True, blank=True)
-#     change_module = jsonfield.JSONField(verbose_name="变更模板", null=True, blank=True)
-#
-#     def __str__(self):
-#         return self.name
+    def __str__(self):
+        return self.name
 
 
 class Profile(BaseModel):
-    user = models.OneToOneField(User, verbose_name="用户")
+    user = models.OneToOneField(User, verbose_name="用户", related_name='profile')
     department = models.ForeignKey("Department", verbose_name="部门", null=True, blank=True)
     fit_user_type = models.IntegerField("云管用户类型", default=3)
     phone = models.BigIntegerField("手机号", null=True, blank=True)
     email = models.EmailField("邮箱", null=True, blank=True)
-    job_title = models.ForeignKey(JobTitle, verbose_name="岗位名称", null=True, blank=True)
+    avatar = models.ImageField("头像", null=True, blank=True, upload_to="avatar/")
+    job_title = models.ForeignKey(
+        JobTitle, verbose_name="岗位名称", null=True, blank=True,
+        related_name="job_title"
+    )
     last_reset_pass = models.DateTimeField("上次修改密码时间", null=True, blank=True)
 
     def __str__(self):

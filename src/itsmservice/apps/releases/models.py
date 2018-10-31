@@ -18,3 +18,6 @@ class Release(BaseModel):
     stage = models.CharField("发布阶段", max_length=128, choices=STAGE)
     initiator = models.CharField("发起人", max_length=128, null=True, blank=True)
     technician = models.ForeignKey(User, max_length=128, verbose_name="处理人", null=True, blank=True)
+
+    def __str__(self):
+        return self.name

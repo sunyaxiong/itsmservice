@@ -5,6 +5,7 @@ from apps.common.models import BaseModel, BaseFile
 from apps.events.models import Event, Classify
 from apps.issues.models import Issue
 from apps.accounts.models import Department
+from apps.workflow.models import FlowModule
 
 
 class Change(BaseModel):
@@ -42,15 +43,19 @@ class Change(BaseModel):
     )
 
     name = models.CharField(max_length=129, verbose_name="变更名称", null=True, blank=True)
-    description = models.TextField(verbose_name="变更描述")
-    stage = models.CharField("当前阶段", max_length=128, default="draft", choices=STAGE)
+    description = models.TextField(verbose_name="变更描述", null=True, blank=True)
+    stage = models.CharField(
+        "当前阶段", max_length=128, default="draft", choices=STAGE, null=True, blank=True
+    )
     status = models.CharField("状态", max_length=128, null=True, blank=True)
     classify = models.ForeignKey(Classify, null=True, blank=True, verbose_name="分类")
     emergency_degree = models.CharField(
         verbose_name="紧急度", choices=EMERGENCY_DEGREE, max_length=128, null=True, blank=True
     )
     service_level = models.CharField("SLA", max_length=128, null=True, blank=True)  # TODO 是否关联表
-    priority = models.CharField("优先级", max_length=128, choices=PRIORITY)
+    priority = models.CharField(
+        "优先级", max_length=128, choices=PRIORITY, null=True, blank=True
+    )
     influence_scope = models.CharField(
         "影响范围", choices=INFLUENCE_SCOPE_CHOICE, max_length=128, null=True, blank=True
     )
@@ -69,12 +74,14 @@ class Change(BaseModel):
     node_name = models.CharField(
         max_length=128, verbose_name="流程节点", null=True, blank=True
     )
-    located_in = models.CharField("位置", max_length=128)
+    located_in = models.CharField("位置", max_length=128, null=True, blank=True)
 
     start_time = models.DateTimeField("计划开始时间", null=True, blank=True)
     end_times = models.DateTimeField("计划结束时间", null=True, blank=True)
     flow_node = models.IntegerField(verbose_name="当前流程节点", default=0)
-    flow_module = models.CharField(verbose_name="流程模板", max_length=128, null=True, blank=True)
+    flow_module = models.ForeignKey(
+        FlowModule, verbose_name="流程模板", null=True, blank=True
+    )
 
     def __str__(self):
         return self.name or ""
@@ -82,7 +89,7 @@ class Change(BaseModel):
 
 class ChangeProcessLog(BaseModel):
     change = models.ForeignKey(Change, related_name="logs", verbose_name="关联变更")
-    username = models.ForeignKey(User, blank=True, null=True)
+    user = models.ForeignKey(User, blank=True, null=True)
     content = models.TextField("处理记录", blank=True, null=True)
     stage = models.CharField("处理阶段", blank=True, null=True, max_length=128)
     status_before = models.CharField("修改前状态", null=True, blank=True, max_length=128)

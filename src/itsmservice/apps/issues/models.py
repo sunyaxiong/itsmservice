@@ -65,6 +65,9 @@ class Issue(BaseModel):
         verbose_name = "问题"
         verbose_name_plural = "问题"
 
+    def __str__(self):
+        return self.name
+
 
 class IssueProcessLog(BaseModel):
     issue_obj = models.ForeignKey(Issue, related_name="logs", verbose_name="关联问题")

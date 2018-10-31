@@ -16,6 +16,9 @@ class Classify(BaseModel):
         "Classify", verbose_name="父级别菜单", null=True, blank=True
     )
 
+    def __str__(self):
+        return self.value
+
 
 class Event(BaseModel):
 
@@ -54,7 +57,7 @@ class Event(BaseModel):
         ("3", "组织"),
     )
 
-    name = models.CharField(max_length=128, verbose_name="事件名称", null=True, blank=True)
+    name = models.CharField(max_length=128, verbose_name="事件名称")
     description = models.TextField(verbose_name="事件描述", null=True, blank=True)
     state = models.CharField(max_length=128, choices=EVENT_STATE_CHOICE, verbose_name="事件状态", null=True, blank=True)
     initiator = models.ForeignKey(
@@ -64,7 +67,7 @@ class Event(BaseModel):
     handler = models.ForeignKey(
         User, verbose_name="处理人", null=True, blank=True
     )
-    create_by = models.CharField("创建方式", max_length=128)
+    create_by = models.CharField("创建方式", max_length=128, default="itsm")
     influence_scope = models.CharField(
         "影响范围", choices=INFLUENCE_SCOPE_CHOICE, max_length=128, null=True, blank=True
     )
@@ -74,13 +77,13 @@ class Event(BaseModel):
         verbose_name="紧急度", choices=EMERGENCY_DEGREE, max_length=128, null=True, blank=True
     )
     service_level = models.CharField("SLA", max_length=128, null=True, blank=True)  # TODO 是否关联表
-    priority = models.CharField("优先级", max_length=128, choices=PRIORITY)
+    priority = models.CharField("优先级", max_length=128, choices=PRIORITY, default=0)
     classify = models.ForeignKey(Classify, verbose_name="事件分类", null=True, blank=True)
 
     resource = models.CharField("事件源", max_length=128, null=True, blank=True)  # TODO 事件源
 
     def __str__(self):
-        return self.name or ""
+        return self.name
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None, *args, **kwargs):
@@ -106,9 +109,14 @@ class ProductInfo(BaseModel):
 
 class EventProcessLog(BaseModel):
 
-    event_obj = models.ForeignKey(Event, related_name="logs", verbose_name="关联事件")
-    username = models.ForeignKey(User, max_length=256, blank=True, null=True)
+    event_obj = models.ForeignKey(
+        Event, null=True, blank=True, related_name="logs", verbose_name="关联事件"
+    )
+    user = models.ForeignKey(User, blank=True, null=True, verbose_name="提交人")
     content = models.TextField("处理记录", blank=True, null=True)
+
+    def __str__(self):
+        return self.event_obj.name
 
 
 class EventAttachments(BaseFile):
@@ -116,3 +124,5 @@ class EventAttachments(BaseFile):
     event = models.ForeignKey(Event, related_name="event_attachments", verbose_name="附件")
     upload_user = models.ForeignKey(User, verbose_name="上传者")
 
+    def __str__(self):
+        return str(self.event.name)

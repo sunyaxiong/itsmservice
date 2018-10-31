@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import datetime
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -53,7 +54,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_filters',
     'rest_framework',
+    'rest_framework_swagger',
     'apps.apps.AppsConfig',
     'apps.accounts.apps.AccountsConfig',
     'apps.accounts.django_cas_ng',
@@ -67,6 +70,8 @@ INSTALLED_APPS = [
     'apps.api.apps.ApiConfig',
     'apps.common.apps.CommonConfig',
     'apps.cmdb.apps.CmdbConfig',
+    'apps.workflow.apps.WorkflowConfig',
+    'apps.releases.apps.ReleasesConfig'
 ]
 
 MIDDLEWARE = [
@@ -77,6 +82,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'apps.api.cors.CORSMiddleware',
 ]
 
 AUTHENTICATION_BACKENDS = (
@@ -161,6 +167,8 @@ STATICFILES_DIRS = [
     '/home/syx/workspace/itsmservice/src/itsmservice/static',
 ]
 
+# media root
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # logging
 LOGGING = {
@@ -200,12 +208,13 @@ LOGGING = {
 
 # REST FRAMEWORK
 REST_FRAMEWORK = {
-        # 'DEFAULT_AUTHENTICATION_CLASSES': (
-        #     'people.authentication.CustomUserTokenAuthentication',
-        #     'people.authentication.CustomUserSessionAuthentication',
-        #     ),
+        'DEFAULT_AUTHENTICATION_CLASSES': (
+            # 'people.authentication.CustomUserTokenAuthentication',
+            # 'people.authentication.CustomUserSessionAuthentication',
+            'rest_framework_jwt.authentication.JSONWebTokenAuthentication',  # 添加jwt验证类
+            ),
         'DEFAULT_FILTER_BACKENDS': (
-            'rest_framework.filters.DjangoFilterBackend',
+            'django_filters.rest_framework.DjangoFilterBackend',
             'rest_framework.filters.SearchFilter',
             'rest_framework.filters.OrderingFilter',
             ),
@@ -222,6 +231,11 @@ REST_FRAMEWORK = {
         #     ),
         }
 
+# jwt conf
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),  # token有效期
+    'JWT_RESPONSE_PAYLOAD_HANDLER': 'apps.accounts.utils.jwt_response_payload_handler',  # response中token的payload部分处理函数
+}
 
 # Redis conf
 CACHES = {
